@@ -1,0 +1,23 @@
+{
+  "name": "Task Management System - MERN Stack",
+  "version": "1.0.0",
+  "description": "A complete Task Management System with Role-Based Access Control (RBAC), Admin Dashboard, Activity Logging, and Analytics built with MERN stack",
+  "main": "backend/server.js",
+  "scripts": {
+    "install-all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "dev-backend": "cd backend && npm run dev",
+    "dev-frontend": "cd frontend && npm start",
+    "build-frontend": "cd frontend && npm run build",
+    "start-backend": "cd backend && npm start"
+  },
+  "keywords": [
+    "MERN",
+    "Task Management",
+    "RBAC",
+    "Admin Dashboard",
+    "Activity Logging",
+    "Analytics"
+  ],
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f9fafb;
+  color: #111827;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.btn {
+  @apply inline-block px-4 py-2 rounded-lg font-medium transition-all duration-200;
+}
+
+.btn-primary {
+  @apply btn bg-blue-600 text-white hover:bg-blue-700;
+}
+
+.btn-secondary {
+  @apply btn bg-gray-600 text-white hover:bg-gray-700;
+}
+
+.btn-danger {
+  @apply btn bg-red-600 text-white hover:bg-red-700;
+}
+
+.btn-success {
+  @apply btn bg-green-600 text-white hover:bg-green-700;
+}
+
+.btn-outline {
+  @apply btn border-2 border-gray-300 text-gray-700 hover:bg-gray-50;
+}
+
+.input-group {
+  @apply w-full mb-4;
+}
+
+.input-label {
+  @apply block mb-2 font-medium text-gray-700;
+}
+
+.input-field {
+  @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.table {
+  @apply w-full border-collapse;
+}
+
+.table thead {
+  @apply bg-gray-100 border-b-2 border-gray-300;
+}
+
+.table th {
+  @apply px-4 py-3 text-left font-semibold text-gray-700;
+}
+
+.table td {
+  @apply px-4 py-3 border-b border-gray-200;
+}
+
+.table tbody tr:hover {
+  @apply bg-gray-50;
+}
+
+.card {
+  @apply bg-white rounded-lg shadow-md p-6 border border-gray-200;
+}
+
+.loading {
+  @apply flex items-center justify-center;
+}
+
+.loading-spinner {
+  @apply w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin;
+}
