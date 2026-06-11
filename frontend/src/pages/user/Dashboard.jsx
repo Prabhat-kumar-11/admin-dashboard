@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../components/layout/Header';
-import Sidebar from '../components/layout/Sidebar';
-import { StatsCard } from '../components/cards/StatsCards';
-import { FiUsers, FiCheckSquare, FiActivity } from 'react-icons/fi';
-import { adminService } from '../services/apiService';
-import { showToast } from '../components/common/Toast';
+import Header from '../../components/layout/Header';
+import Sidebar from '../../components/layout/Sidebar';
+import { StatsCard } from '../../components/cards/StatsCards';
+import { FiCheckSquare } from 'react-icons/fi';
+import { taskService } from '../../services/apiService';
+import { showToast } from '../../components/common/Toast';
 
 const UserDashboard = () => {
   const [stats, setStats] = useState(null);
@@ -16,10 +16,23 @@ const UserDashboard = () => {
 
   const fetchStats = async () => {
     try {
-      const response = await adminService.getAnalytics();
-      setStats(response.data.analytics);
+      const [allTasks, completedTasks, pendingTasks, inProgressTasks] = await Promise.all([
+        taskService.getUserTasks(1, 1),
+        taskService.getUserTasks(1, 1, 'Completed'),
+        taskService.getUserTasks(1, 1, 'Pending'),
+        taskService.getUserTasks(1, 1, 'In Progress'),
+      ]);
+
+      setStats({
+        tasks: {
+          total: allTasks.data.pagination.totalTasks,
+          completed: completedTasks.data.pagination.totalTasks,
+          pending: pendingTasks.data.pagination.totalTasks,
+          inProgress: inProgressTasks.data.pagination.totalTasks,
+        },
+      });
     } catch (error) {
-      showToast.error('Failed to load analytics');
+      showToast.error('Failed to load dashboard');
     } finally {
       setIsLoading(false);
     }

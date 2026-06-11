@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../services/apiService';
 
 const AuthContext = createContext();
 
@@ -17,7 +17,6 @@ export const AuthProvider = ({ children }) => {
     if (storedToken && storedUser) {
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
-      axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
     }
     setLoading(false);
   }, []);
@@ -25,10 +24,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       setError(null);
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/auth/login`,
-        { email, password }
-      );
+      const response = await api.post('/auth/login', { email, password });
 
       const { token, user } = response.data;
 
@@ -36,7 +32,6 @@ export const AuthProvider = ({ children }) => {
       setUser(user);
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
       return { token, user };
     } catch (err) {
@@ -49,10 +44,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (name, email, password) => {
     try {
       setError(null);
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/auth/register`,
-        { name, email, password }
-      );
+      const response = await api.post('/auth/register', { name, email, password });
 
       const { token, user } = response.data;
 
@@ -60,7 +52,6 @@ export const AuthProvider = ({ children }) => {
       setUser(user);
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
       return { token, user };
     } catch (err) {
@@ -75,7 +66,6 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    delete axios.defaults.headers.common['Authorization'];
   };
 
   const isAdmin = () => user?.role === 'Admin';

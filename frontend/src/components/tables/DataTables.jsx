@@ -1,6 +1,6 @@
 import React from 'react';
 import { formatDate, getStatusColor } from '../../utils/helpers';
-import { Pagination } from './Common';
+import { Pagination } from '../common/Common';
 
 export const UsersTable = ({ users, onDelete, onStatusChange, isLoading, pagination, onPageChange }) => {
   if (isLoading) {

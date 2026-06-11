@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -63,9 +63,9 @@ export const adminService = {
   },
 
   // Task Monitoring
-  getAllTasks: (page = 1, limit = 10, status = '') => {
+  getAllTasks: (page = 1, limit = 10, status = '', search = '') => {
     return api.get('/admin/tasks', {
-      params: { page, limit, status: status || undefined },
+      params: { page, limit, status: status || undefined, search: search || undefined },
     });
   },
 
@@ -74,13 +74,15 @@ export const adminService = {
   },
 
   // Activity Logs
-  getActivityLogs: (page = 1, limit = 10, action = '', userId = '') => {
+  getActivityLogs: (page = 1, limit = 10, action = '', userId = '', search = '', sort = 'desc') => {
     return api.get('/admin/activity-logs', {
       params: {
         page,
         limit,
         action: action || undefined,
         userId: userId || undefined,
+        search: search || undefined,
+        sort,
       },
     });
   },

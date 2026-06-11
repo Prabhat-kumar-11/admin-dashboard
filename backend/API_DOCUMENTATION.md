@@ -109,7 +109,7 @@ All admin endpoints require Admin role.
 #### Task Monitoring
 
 ##### Get All Tasks
-- **GET** `/api/admin/tasks?page=1&limit=10&status=Pending`
+- **GET** `/api/admin/tasks?page=1&limit=10&status=Pending&search=report`
 - Response: `{ tasks, pagination }`
 
 ##### Delete Task
@@ -119,7 +119,7 @@ All admin endpoints require Admin role.
 #### Activity Logs
 
 ##### Get Activity Logs
-- **GET** `/api/admin/activity-logs?page=1&limit=10&action=LOGIN&userId=USER_ID`
+- **GET** `/api/admin/activity-logs?page=1&limit=10&action=LOGIN&userId=USER_ID&search=john&sort=desc`
 - Response: `{ logs, pagination }`
 
 #### Analytics

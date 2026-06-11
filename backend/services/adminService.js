@@ -87,17 +87,33 @@ exports.updateUserStatus = async (userId, status, adminId, req) => {
 };
 
 // Get all tasks
-exports.getAllTasks = async (page = 1, limit = 10, filter = {}) => {
+exports.getAllTasks = async (page = 1, limit = 10, filter = {}, search = '') => {
   try {
     const skip = (page - 1) * limit;
+    const query = { ...filter };
 
-    const tasks = await Task.find(filter)
+    if (search) {
+      const matchingUsers = await User.find({
+        $or: [
+          { name: { $regex: search, $options: 'i' } },
+          { email: { $regex: search, $options: 'i' } },
+        ],
+      }).select('_id');
+
+      query.$or = [
+        { title: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } },
+        { createdBy: { $in: matchingUsers.map((user) => user._id) } },
+      ];
+    }
+
+    const tasks = await Task.find(query)
       .populate('createdBy', 'name email')
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: -1 });
 
-    const total = await Task.countDocuments(filter);
+    const total = await Task.countDocuments(query);
 
     return {
       tasks,

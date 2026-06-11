@@ -57,10 +57,11 @@ exports.getAllTasks = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const status = req.query.status;
+    const search = req.query.search || '';
 
     const filter = status ? { status } : {};
 
-    const result = await adminService.getAllTasks(page, limit, filter);
+    const result = await adminService.getAllTasks(page, limit, filter, search);
 
     res.status(200).json({
       message: 'Tasks retrieved successfully',
@@ -91,14 +92,30 @@ exports.deleteTask = async (req, res) => {
 exports.getActivityLogs = async (req, res) => {
   try {
     const ActivityLog = require('../models/ActivityLog');
+    const User = require('../models/User');
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const action = req.query.action;
     const userId = req.query.userId;
+    const search = req.query.search || '';
+    const sort = req.query.sort === 'asc' ? 1 : -1;
 
     const filter = {};
     if (action) filter.action = action;
     if (userId) filter.userId = userId;
+    if (search) {
+      const matchingUsers = await User.find({
+        $or: [
+          { name: { $regex: search, $options: 'i' } },
+          { email: { $regex: search, $options: 'i' } },
+        ],
+      }).select('_id');
+
+      filter.$or = [
+        { description: { $regex: search, $options: 'i' } },
+        { userId: { $in: matchingUsers.map((user) => user._id) } },
+      ];
+    }
 
     const skip = (page - 1) * limit;
 
@@ -106,7 +123,7 @@ exports.getActivityLogs = async (req, res) => {
       .populate('userId', 'name email')
       .skip(skip)
       .limit(limit)
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: sort });
 
     const total = await ActivityLog.countDocuments(filter);
 
