@@ -2,7 +2,7 @@
 exports.errorHandler = (err, req, res, next) => {
   console.error(err);
 
-  const status = err.status || 500;
+  const status = err.status || (res.statusCode === 200 ? 500 : res.statusCode);
   const message = err.message || 'Internal Server Error';
 
   res.status(status).json({
@@ -14,6 +14,6 @@ exports.errorHandler = (err, req, res, next) => {
 // 404 Not Found middleware
 exports.notFound = (req, res, next) => {
   const error = new Error(`Not Found - ${req.originalUrl}`);
-  res.status(404);
+  error.status = 404;
   next(error);
 };

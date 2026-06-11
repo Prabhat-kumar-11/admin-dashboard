@@ -32,6 +32,10 @@ app.use('/api/tasks', taskRoutes);
 app.use('/api/admin', adminRoutes);
 
 // Health check route
+app.get('/', (req, res) => {
+  res.status(200).json({ message: 'Task Management API is running' });
+});
+
 app.get('/api/health', (req, res) => {
   res.status(200).json({ message: 'Server is running' });
 });
